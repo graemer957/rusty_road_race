@@ -1,4 +1,4 @@
-use bevy::{prelude::*, window::Cursor};
+use bevy::{app::AppExit, prelude::*, window::Cursor};
 
 fn main() {
     App::new()
@@ -14,5 +14,14 @@ fn main() {
             }),
             ..default()
         }))
+        // See: https://bevy-cheatbook.github.io/programming/app-builder.html#quitting-the-app
+        .add_systems(Update, bevy::window::close_on_esc)
+        .add_systems(Update, handle_exit)
         .run();
+}
+
+fn handle_exit(keys: Res<Input<KeyCode>>, mut exit: EventWriter<AppExit>) {
+    if keys.just_pressed(KeyCode::Q) {
+        exit.send(AppExit);
+    }
 }
